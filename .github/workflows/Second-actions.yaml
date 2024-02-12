@@ -1,0 +1,40 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: windows-runner
+  namespace: actions-runners
+spec:
+  template:
+    spec:
+      enterprise: gpc
+      labels:
+        - codeql
+        - windows-latest
+      containers:
+      - name: runner
+        resources:
+          limits:
+            cpu: "1.0"
+            memory: "2Gi"
+          requests:
+            cpu: "0.5"
+            memory: "1Gi"
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: windows-runner-autoscaler
+  namespace: actions-runners
+spec:
+  scaleDownDelaySecondsAfterScaleOut: 300
+  scaleTargetRef:
+    kind: RunnerDeployment
+    name: windows-runner
+  minReplicas: 10
+  maxReplicas: 50
+  metrics:
+    - type: PercentageRunnersBusy
+      scaleUpThreshold: "0.66"
+      scaleDownThreshold: "0.33"
+      scaleUpFactor: "2"
+      scaleDownFactor: "0.5"
