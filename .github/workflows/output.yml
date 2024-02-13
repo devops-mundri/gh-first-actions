@@ -1,0 +1,27 @@
+name: Output Event Details
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  output_event_details:
+    name: Output Event Details
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Output event details
+      run: |
+        echo "Event Name: $GITHUB_EVENT_NAME" > event_details.txt
+        echo "Event Payload:" >> event_details.txt
+        cat $GITHUB_EVENT_PATH >> event_details.txt
+        echo "Repository: $GITHUB_REPOSITORY" >> event_details.txt
+        echo "Commit SHA: $GITHUB_SHA" >> event_details.txt
+
+    - name: Show event details
+      run: cat event_details.txt
+
