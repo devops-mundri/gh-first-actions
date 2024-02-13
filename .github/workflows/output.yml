@@ -1,5 +1,4 @@
 name: Output Event Details
-
 on:
   push:
     branches:
