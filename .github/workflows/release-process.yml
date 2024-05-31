@@ -1,0 +1,31 @@
+name: Create Package and Add Git Tags
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-package-and-add-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Create Zip Package
+        run: |
+          mkdir package
+          cp -r ./* package/
+          zip -r code_package.zip package
+
+      - name: Add Tags to Git
+        run: |
+          VERSION=$(cat CHANGELOG.md | grep -Eo '^## [0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | awk '{print substr($2, 1, length($2))}')
+          git tag -a v$VERSION -m "Version $VERSION"
+          git push origin --tags
