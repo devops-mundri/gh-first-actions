@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          persist-credentials: false # This allows us to commit back to the repo
-          fetch-depth: 0 # This is necessary to fetch all history so we can push changes
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
