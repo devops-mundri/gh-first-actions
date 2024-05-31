@@ -13,28 +13,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Log in to Amazon ECR
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region $AWS_REGION
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
 
       - name: Build Docker image
-        run: |
-          docker build -t my-repo:latest .
+        run: docker build -t my-node-app .
 
       - name: Tag Docker image
-        run: |
-          docker tag my-repo:latest ${{ secrets.ECR_REPOSITORY }}:latest
+        run: docker tag my-node-app:latest ${{ secrets.ECR_REPOSITORY }}:latest
 
       - name: Push Docker image to ECR
-        run: |
-          docker push ${{ secrets.ECR_REPOSITORY }}:latest
+        run: docker push ${{ secrets.ECR_REPOSITORY }}:latest
