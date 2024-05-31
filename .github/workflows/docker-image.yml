@@ -85,7 +85,7 @@ jobs:
         run: |
           cd deployment-repo
           IMAGE_VERSION=${{ steps.vars.outputs.version }}
-          sed -i 's|image: .*dkr.ecr.*amazonaws.com/github-actions-image:.*|image: '${{ secrets.ECR_REPOSITORY }}':'${IMAGE_VERSION}'|' /deployment.yaml
+          sed -i 's|image: .*dkr.ecr.*amazonaws.com/github-actions-image:.*|image: '${{ secrets.ECR_REPOSITORY }}':'${IMAGE_VERSION}'|' deployment.yaml
 
       - name: Commit and push changes to deployment repository
         env:
@@ -94,6 +94,6 @@ jobs:
           cd deployment-repo
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add path/to/deployment.yaml
+          git add deployment.yaml
           git commit -m "Update deployment.yaml with image version ${{ steps.vars.outputs.version }}"
-          git push origin main
+          git push origin master
