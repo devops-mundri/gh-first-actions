@@ -21,7 +21,7 @@ jobs:
       - name: Create Zip Package
         run: |
           mkdir package
-          cp -r ./* package/
+          cp -r ./package/* package/
           zip -r code_package.zip package
 
       - name: Add Tags to Git
