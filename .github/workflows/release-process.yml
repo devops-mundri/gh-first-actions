@@ -21,8 +21,13 @@ jobs:
       - name: Create Zip Package
         run: |
           mkdir package
-          cp -r ./package/* package/
-          zip -r code_package.zip package
+          if [ -d "./package" ] && [ "$(ls -A ./package)" ]; then
+            cp -r ./package/* package/
+          else
+            echo "No files found in the ./package directory."
+            exit 1
+          fi
+            zip -r code_package.zip package
 
       - name: Add Tags to Git
         run: |
