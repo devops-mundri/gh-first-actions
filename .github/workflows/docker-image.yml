@@ -77,7 +77,7 @@ jobs:
       - name: Checkout deployment repository
         uses: actions/checkout@v2
         with:
-          repository: devops-mundri/gh-first-actions
+          repository: devops-mundri/deployment-repo
           token: ${{ secrets.PAT_TOKEN }}
           path: deployment-repo
 
